@@ -23,7 +23,7 @@ class Chatroom
             //'daemonize' => 1,//开启守护进程模式后(daemonize => true)，标准输出将会被重定向到log_file
         ]);
         
-        $this->serv->on('satrt', [$this, 'onStart']);
+        $this->serv->on('start', [$this, 'onStart']);
         $this->serv->on('open', [$this, 'onOpen']);
         $this->serv->on('receive', [$this, 'onReceive']);
         $this->serv->on('close', [$this, 'onClose']);
