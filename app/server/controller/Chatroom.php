@@ -24,8 +24,9 @@ class Chatroom
         ]);
         
         $this->serv->on('start', [$this, 'onStart']);
+        $this->serv->on('workerStart', [$this, 'onWorkerStart']);
         $this->serv->on('open', [$this, 'onOpen']);
-        $this->serv->on('receive', [$this, 'onReceive']);
+        $this->serv->on('message', [$this, 'onMessage']);
         $this->serv->on('close', [$this, 'onClose']);
     }
     
@@ -34,10 +35,22 @@ class Chatroom
      */
     public function onStart($server)
     {
-        var_dump($server);
+        echo 'start' . PHP_EOL;
         #初始化 数据库 redis 长连接
         Db::connect();
         RedisService::getInstance();
+    }
+    
+    
+
+    /**
+     * 
+     * @param \swoole_websocket_server $server
+     * @param int $worker_id
+     */
+    public function onWorkerStart(\swoole_websocket_server $server, int $worker_id)
+    {
+        
     }
     
     public function onOpen(\swoole_websocket_server $server, \swoole_http_request $request)
@@ -48,11 +61,13 @@ class Chatroom
     }
     
     
-    public function onReceive(\swoole_websocket_server $server, \Swoole\WebSocket\Frame $frame)
+    public function onMessage(\swoole_websocket_server $server, \Swoole\WebSocket\Frame $frame)
     {
         echo 'onReceive：' . $frame->data;
         echo PHP_EOL;
     }
+    
+    
     
     public function onClose(\swoole_websocket_server $server, $fd)
     {
@@ -60,4 +75,9 @@ class Chatroom
         echo PHP_EOL;
     }
     
+    
+    public function index()
+    {
+        $this->serv->start();
+    }
 }

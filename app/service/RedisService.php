@@ -14,9 +14,9 @@ class RedisService
     public $redis;
     
     protected $options = [
-        'host'       => '47.100.161.112',
+        'host'       => '127.0.0.1',
         'port'       => 6380,
-        'password'   => 'redis_nihao123###',
+        'password'   => '123456',
         'select'     => 14,
         'timeout'    => 0,
         'expire'     => 0,
