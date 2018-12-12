@@ -1,9 +1,9 @@
 <?php
 namespace app\server\controller;
 
-use app\service\RedisService;
 use think\Db;
 use Swoole\WebSocket\Server;
+use app\service\RedisService;
 
 class Chatroom
 {
@@ -36,9 +36,6 @@ class Chatroom
     public function onStart($server)
     {
         echo 'start' . PHP_EOL;
-        #初始化 数据库 redis 长连接
-        Db::connect();
-        RedisService::getInstance();
     }
     
     
@@ -50,7 +47,12 @@ class Chatroom
      */
     public function onWorkerStart(\swoole_websocket_server $server, int $worker_id)
     {
-        
+        echo $worker_id;
+        echo PHP_EOL;
+        #初始化 数据库 redis 长连接
+        $res = Db::setQuery("select *");
+        var_dump($res['id']);
+        RedisService::getInstance();
     }
     
     public function onOpen(\swoole_websocket_server $server, \swoole_http_request $request)
