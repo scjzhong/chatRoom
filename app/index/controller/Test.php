@@ -6,6 +6,7 @@ class Test
 {
     public function index()
     {
+        echo 'Test_index';
 //         $res = Db::table('tcp_port')->select();
 //         var_dump($res);
 

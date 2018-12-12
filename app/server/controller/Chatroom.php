@@ -19,7 +19,7 @@ class Chatroom
         $this->serv->set([
             'worker_num' => 4,
             'max_request' => 1000,
-            'log_file' => '/var/log/swoole/swoole.log',
+            'log_file' => '/var/log/swoole/chatroom.log',
             //'daemonize' => 1,//开启守护进程模式后(daemonize => true)，标准输出将会被重定向到log_file
         ]);
         
