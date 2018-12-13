@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>room</title>
+	<title></title>
 	<!-- <script src="dist/jquery-1.11.1.min.js"></script> -->
 	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="/v1/js/jquery.danmu.js"></script>
@@ -21,8 +21,12 @@
 </head>
 <body>
 	<script type="text/javascript">
-
-			var ws = new WebSocket("ws://47.105.140.40:9501");
+			var uid = "<?php echo $uid;?>";
+			var roomId = "<?php echo $room_id;?>";
+			console.log(uid);
+			console.log(roomId);
+			
+			var ws = new WebSocket("ws://47.105.140.40:9501?uid=" + uid + "&room_id=" + roomId);
 			ws.onopen = function(){
 			    console.log("握手成功");
 			};
