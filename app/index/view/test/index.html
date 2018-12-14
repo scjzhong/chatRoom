@@ -32,7 +32,9 @@
 			};
 			
 			ws.onmessage = function(e){
-			    console.log(e.data);
+				var obj = eval('(' + e.data + ')');
+				console.log(obj.err_msg);
+				$("#danmu").append("<br/>" + obj.err_msg);
 			};
 			
 			ws.onerror = function(){
@@ -57,9 +59,14 @@
 			} );
 			$('#danmu').danmu('danmu_start');
 		});
-		function send() {+
+		
+		function send() {
 			//console.log(document.getElementById('content').value);
-			ws.send(document.getElementById('content').value);
+			var content = $("#content").val();
+			var type = 'say';
+			var json = JSON.stringify({"type": type, "content": content});
+			
+			ws.send(json);
 		}
 	</script>
 	<div id="danmu"></div>

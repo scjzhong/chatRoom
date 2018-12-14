@@ -11,7 +11,7 @@ class Login extends BaseController
 //         if(request()->isPost()){
             $username = $this->_filter(request()->input('username'));
             $pwd = $this->_filter(request()->input('passwd'));
-            $username = 'scjzhong@sina.com';
+            $username = 'hhh@qq.cn';
             $pwd = 'qwer1234';
             $user = Db::table('user')->where(['username' => $username])->find();
             if($this->createPassword($pwd, $user['salt']) != $user['password']){

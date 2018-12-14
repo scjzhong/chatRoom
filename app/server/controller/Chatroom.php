@@ -17,6 +17,8 @@ class Chatroom extends BaseServer
     
     public function __construct()
     {   
+        header('Content-Type:application/json; charset=utf-8');
+        
         $this->serv = new Server($this->host, $this->port);
         $this->serv->set([
             'worker_num' => 4,
@@ -75,13 +77,15 @@ class Chatroom extends BaseServer
         #第二步 加入房间
         $this->joinRoom($roomId, $uid, $request->fd);
         
-        $server->push($request->fd, $this->outputSuccess("欢迎" . $user['nickname'] . "加入房间"));
+        #广播数据
+        $this->broadcastMsg($server, $request->fd, "欢迎" . $user['nickname'] . "加入房间");
     }
     
     
     public function onMessage(\swoole_websocket_server $server, \Swoole\WebSocket\Frame $frame)
     {
-        $server->push($frame->fd, $this->outputSuccess($frame->data));
+        #广播数据
+        $this->broadcastMsg($server, $frame->fd, json_decode($frame->data)->content);
     }
     
     
@@ -284,5 +288,20 @@ class Chatroom extends BaseServer
     }
     
     
-    
+    /**
+     * 广播数据
+     * @param \swoole_websocket_server $server
+     * @param int $fd
+     * @param string $mesage 需要广播出去的数据
+     */
+    protected function broadcastMsg(\swoole_websocket_server $server, int $fd, string $mesage)
+    {
+        $roomId = $this->getRoomIdFdRoomIdMapByFd($fd);// 获取fd 所在的房间
+        $fds  = $this->getRoomFdsByRoomId($roomId);//获取房间下所有的fd
+        foreach ($fds as $fd) {//循环广播 该房间的下的fd 的数据
+            if($server->exist($fd)){//该fd存在再发送， 不存在则 跳过
+                $server->push($fd, $this->outputSuccess($mesage));
+            }
+        }
+    }
 }
