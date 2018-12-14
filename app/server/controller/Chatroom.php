@@ -39,6 +39,8 @@ class Chatroom extends BaseServer
      */
     public function onStart($server)
     {
+        #清除db中的数据
+        $this->flushDb();
         echo 'start' . PHP_EOL;
     }
 
@@ -303,5 +305,16 @@ class Chatroom extends BaseServer
                 $server->push($fd, $this->outputSuccess($mesage));
             }
         }
+    }
+    
+    /**
+     * 清除redis中的对应关系
+     */
+    protected function flushDb()
+    {
+        #清空当前库的 对应关系
+        RedisService::getInstance()->redis->flushDB();
+        #关闭主进程的redis连接 该连接无法进行工作
+        RedisService::getInstance()->redis->close();
     }
 }
